@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Category</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gray-900">
+    <div id="intro" class="container w-8/12 m-auto h-screen flex flex-col justify-center items-center">
+        <h1 class="text-gray-400 text-3xl mb-8">
+            Choose a category to get started
+        </h1>
+        <div id="row1" class="flex flex-row m-6 justify-center">
+            <a href="#" onclick="selectCategory(this)" id="development" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Development
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="design" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Design
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="business" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Business
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="personaldev" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Personal Development
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="teaching" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Teaching
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="marketing" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Marketing
+            </a>
+        </div>
+        <div id="row2" class="flex flex-row m-6 justify-center">
+            <a href="#" onclick="selectCategory(this)" id="finance" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Finance
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="health" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Health & Fitness
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="software" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Software
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="lifestyle" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Lifestyle
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="productivity" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Productivity
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="music" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Music
+            </a>
+            <a href="#" onclick="selectCategory(this)" id="photography" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Photography
+            </a>
+        </div>
+    </div>
+    <script>
+        let selectedCategory = "";
+
+        function selectCategory(elm) {
+            let parent = elm.parentElement;
+            if (parent.id == "row1") {
+                $("#row2").animate({
+                    opacity: 0
+                }, 1250).promise().done(function() {
+                    $("#row2").css("display", "none");
+                });
+            } else {
+                // fade out row2
+                $("#row1").animate({
+                    opacity: 0
+                }, 1250).promise().done(function() {
+                    $("#row1").css("display", "none");
+                });
+            }
+            children = parent.children;
+            for (let i = 0; i < children.length; i++) {
+                if (children[i].id != elm.id) {
+                    $(children[i]).animate({
+                        opacity: 0
+                    }, 1250).promise().done(function() {
+                        $(children[i]).css("display", "none");
+                    });
+                }
+            }
+            setTimeout(function() {
+                $(elm).animate({
+                fontSize: "5rem",
+                lineHeight: "6rem",
+                padding: "2rem"
+            }, 1500);
+            }, 2000);
+            setTimeout(function() {
+                selectedCategory = elm.id;
+                window.location.href = "./suggestion?c=" + selectedCategory;
+            }, 6000);
+        }
+    </script>
+</body>
+</html>

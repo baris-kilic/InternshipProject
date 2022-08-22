@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udemy Course Suggestor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        th, td {
+            padding: 15px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <div id="intro" class="container w-8/12 m-auto h-screen flex flex-col justify-center items-center opacity-0">
+        <img class="w20 h-20" src="./img/laptop-code-solid.svg" draggable="false">
+        <h1 class="text-7xl font-semibold text-center uppercase text-gray-500 leading-relaxed">
+            Welcome to the 
+            <br>
+            <span class="text-gray-300">Udemy</span> Course Suggestor
+        </h1>
+    </div>
+    <script>
+        // fade in intro
+        document.addEventListener('DOMContentLoaded', () => {
+            $('#intro').animate({
+                opacity: 1
+            }, 1000);
+        });
+        setTimeout(function(){
+            $('#intro').fadeOut(1000).promise().done(function(){
+                $('body').load('./cc.html')
+                setTimeout(function(){
+                    $('#category').animate({
+                        opacity: 1
+                    }, 1000);
+                }, 1000);
+            });
+        }, 4000);
+    </script>
+</body>
+</html>

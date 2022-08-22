@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Category</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        th, td {
+            padding: 15px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <div id="level" class="container w-8/12 m-auto h-screen flex flex-col justify-center items-center">
+        <h1 class="text-gray-400 text-3xl mb-8">
+            Enter a <span class="text-gray-200">topic</span> you want to learn and choose a level of difficulty
+        </h1>
+        <div id="row1" class="flex flex-row m-6 justify-center w-7/12">
+            <input class="placeholder:text-2xl text-3xl p-3 rounded-md focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 w-full mr-4" type="text" placeholder="What do you want to learn?.."/>
+            <select class="placeholder:text-xl text-xl p-3 rounded-md focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 w-fit" id="levelSelect">
+                <option value="" disabled selected>Select a level</option>
+                <option value="1">All Levels</option>
+                <option value="1">Beginner Level</option>
+                <option value="2">Intermediate Level</option>
+                <option value="3">Expert Level</option>
+            </select>
+        </div>
+        <div id="row2" class="flex flex-row m-6 justify-center">
+            <a href="#" onclick="suggestCourse()" id="finance" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+                Suggested Courses
+            </a>
+        </div>
+        <div id="row3" class="flex flex-row m-6 justify-center">
+            <p id="errors" class="text-red-500 text-xl hidden">
+                
+            </p>
+        </div>
+        <div id="row4" class="flex flex-row m-6 justify-center hidden">
+            <table class="text-2xl text-gray-400">
+                <thead class="bg-gray-700 text-white">
+                    <tr>
+                        <th>Course</th>
+                        <th>Level</th>
+                        <th>Instructor</th>
+                        <th>Summary</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody id="suggestionsTable">
+                    <tr>
+                        <th>Example Example</th>
+                        <th>Example Example</th>
+                        <th>Example Example</th>
+                        <th>Example Example</th>
+                        <th>Example Example</th>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        function suggestCourse(){
+            var topic = $('#row1 input').val();
+            var level = $('#levelSelect').val();
+            if(topic == ''){
+                $('#errors').html('Please enter a topic');
+                $('#errors').removeClass('hidden');
+                return;
+            } else {
+                $('#errors').addClass('hidden');
+            }
+            if (level == null || level == '') {
+                $('#errors').html('Please select a level');
+                $('#errors').removeClass('hidden');
+                return;
+            } else {
+                $('#errors').addClass('hidden');
+            }
+            console.log(topic, level);
+        }
+    </script>
+</body>
+</html>

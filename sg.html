@@ -1,0 +1,176 @@
+<div id="level" class="container w-8/12 m-auto h-full min-h-screen flex flex-col justify-center items-center">
+    <h1 class="text-gray-400 text-3xl mb-8 text-center">
+        You want to learn <span id="categoryText" class="text-gray-200"></span>...
+        <br>
+        Enter a <span class="text-gray-200">topic</span> you want to learn and choose a level of difficulty
+    </h1>
+    <div id="row3" class="flex flex-row m-6 justify-center w-7/12">
+        <input class="placeholder:text-2xl text-3xl p-3 rounded-md focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 w-full mr-4" type="text" placeholder="What do you want to learn?.."/>
+        <select class="placeholder:text-xl text-xl p-3 rounded-md focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 w-fit" id="levelSelect">
+            <option value="" disabled selected>Select a level</option>
+            <option value="Any">Any Level</option>
+            <option value="All Levels">All Levels</option>
+            <option value="Beginner Level">Beginner Level</option>
+            <option value="Intermediate Level">Intermediate Level</option>
+            <option value="Expert Level">Expert Level</option>
+        </select>
+    </div>
+    <div id="row4" class="flex flex-row m-6 justify-center">
+        <a href="javascript:void(0)" onclick="backToCategory()" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out flex">
+            <svg class="w-8 h-8 mr-2 fill-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                <!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                <path d="M447.1 256C447.1 273.7 433.7 288 416 288H109.3l105.4 105.4c12.5 12.5 12.5 32.75 0 45.25C208.4 444.9 200.2 448 192 448s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25l160-160c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25L109.3 224H416C433.7 224 447.1 238.3 447.1 256z"/>
+            </svg>
+            Change Category
+        </a>
+        <a href="javascript:void(0)" onclick="suggestCourse()" class="mx-4 bg-gray-700 text-gray-400 p-4 rounded-full text-2xl hover:bg-gray-500 hover:text-gray-300 transition-all duration-300 ease-in-out">
+            Suggested Courses
+        </a>
+    </div>
+    <div id="row5" class="flex flex-row m-6 justify-center">
+        <p id="errors" class="text-red-500 text-xl hidden">
+            
+        </p>
+    </div>
+    <div id="row6" class="flex flex-row m-6 justify-center hidden h-auto">
+        <table class="text-2xl text-gray-400">
+            <thead class="bg-gray-700 text-white">
+                <tr>
+                    <th>Course</th>
+                    <th>Level</th>
+                    <th>Instructor</th>
+                    <th>Summary</th>
+                    <th>Rating</th>
+                    <th>Reviews</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tbody id="suggestionsTable">
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $('#categoryText').text(selectedCategoryName);
+
+    /**
+     * Converts stringified Python list to Javascript array
+     * 
+     * @param listString - a string of the form '[item1, item2, item3]'
+     * @returns {Array} - an array of the form [item1, item2, item3]
+     */
+    function listStringToArray(listString) {
+        // replace '[' and ']' with ''
+        listString = listString.replace(/[\[\]']+/g, '');
+        // split string into array
+        return listString.split(',');
+    }
+
+    /**
+     * Returns back to the Category selection page
+     */
+    function backToCategory() {
+        $('#level').fadeOut(1000).promise().done(function(){
+                $('body').load('./cc.html')
+                setTimeout(function(){
+                    $('#category').animate({
+                        opacity: 1
+                    }, 1000);
+                }, 1000);});
+    }
+
+    /**
+     * Converts sentimental score to string representation
+     * 
+     * @param compoundScore - a float representing the compound score
+     * @returns {String} - a string representation of the compound score
+     */
+    function parseReviewCompound(compoundScore) {
+        if (compoundScore < -0.6) {
+            return 'Very Negative';
+        } else if (compoundScore < -0.2) {
+            return 'Negative';
+        } else if (compoundScore < 0.2) {
+            return 'Neutral';
+        } else if (compoundScore < 0.6) {
+            return 'Positive';
+        } else {
+            return 'Very Positive';
+        }
+    }
+
+    /**
+     * Suggests course via AJAX call to the server
+     */
+    function suggestCourse(){
+        var topic = $('#row3 input').val();
+        var level = $('#levelSelect').val();
+        if(topic == ''){
+            $('#errors').html('Please enter a topic');
+            $('#errors').removeClass('hidden');
+            return;
+        } else {
+            $('#errors').addClass('hidden');
+        }
+        if (level == null || level == '') {
+            $('#errors').html('Please select a level');
+            $('#errors').removeClass('hidden');
+            return;
+        } else {
+            $('#errors').addClass('hidden');
+        }   
+        $.ajax({
+            url: 'predict',
+            type: 'POST',
+            data: {
+                topic: topic,
+                level: level,
+                category: selectedCategory
+            },
+            success: function(data){
+                courses = data['similar_courses'];
+                $('#suggestionsTable').html('');
+                for(var i = 0; i < courses.length; i++){
+                    let course_title = courses[i]['title'];
+                    let instructional_level = courses[i]['instructional_level'];
+                    let instructor = listStringToArray(courses[i]['instructors']);
+                    let summary = listStringToArray(courses[i]['objectives_summary']);
+                    let rating = null;
+                    let reviews = null;
+                    // check if couse has review_score
+                    if(courses[i]['review_score'] != null){
+                        rating = courses[i]['review_score']["rating"];
+                        reviews = parseReviewCompound(courses[i]['review_score']["compound"]);
+                    } else {
+                        rating = courses[i]['avg_rating'];
+                        reviews = "No reviews";
+                    }
+                    let id = courses[i]['course_id']
+                    $('#suggestionsTable').append(
+                        '<tr>' +
+                            '<td>' + course_title + '</td>' +
+                            '<td>' + instructional_level + '</td>' +
+                            '<td>' + instructor.join('i ') + '</td>' +
+                            '<td>' + summary + '</td>' +
+                            '<td>' + rating.toFixed(2) + '</td>' +
+                            '<td>' + reviews + '</td>' +
+                            '<td>' + '<a target="_blank" href="https://www.udemy.com/course/' + id + '">' + 'View Course' + '</a>' + '</td>' +
+                        '</tr>'
+                    );
+                }
+                $('#row6').removeClass('hidden');
+            },
+            error: function(data){
+                if(data.status == 500) {
+                    $('#suggestionsTable').html('');
+                    $('#suggestionsTable').append(
+                        '<tr>' +
+                            '<td colspan="5" class="text-center">' + 'Unfortunately no courses found...' + '</td>' +
+                        '</tr>'
+                    );
+                }
+                $('#row6').removeClass('hidden');
+            }
+        });
+    }
+</script>
