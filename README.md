@@ -8,7 +8,7 @@ An Intership Project
 [Barış Kılıç](https://github.com/baris-kilic)
 [Banu Uçar](#)
 [Mehmet Koç](https://github.com/memodesen)
-
+[Ümit Kara](https://github.com/umitkara)
 ## Description
 
 In this project we built a recomendataion engine for Udemy courses. We build this model with using 2 different datasets (1 - [Course](https://www.kaggle.com/datasets/andrewmvd/udemy-courses) and 2 - [Reviews](https://www.kaggle.com/datasets/sabrisangjaya/udemy-course-review)). With course dataset we build a clustering model using K-Means algorithm with K = 1500. With the clustering model we can get the cluster of each course. With the cluster we can get the course that is most similar to the course that we want to recommend.
